@@ -61,9 +61,6 @@ bool base_test() {
     ptr1.~intrusive_ptr();
     ptr2.~intrusive_ptr();
 
-    res &= (pupa->get_refcnt() == 0);
-    res &= (lupa->get_refcnt() == 0);
-
     intrusive_ptr<A> ptr3(new A("PEPA"));
 
     ptr1 = ptr2 = ptr3;
@@ -86,6 +83,10 @@ bool base_test() {
     ptr5 = lnk;
 
     res &= (ptr5->arg == "PUPA");
+
+    intrusive_ptr<B> loki(new B());
+
+    intrusive_ptr<A> ptr6 = loki;
 
     return res;
 }
@@ -122,7 +123,9 @@ bool a_lot_of_objects_test() {
 
     for (int i = 99; i >= 0; i--) {
         v2[i].~intrusive_ptr();
-        res &= (leha->get_refcnt() == i);
+        if (i != 0) {
+            res &= (leha->get_refcnt() == i);
+        }
     }
     return res;
 }
@@ -147,9 +150,6 @@ bool reset_test() {
 
     res &= (ptr1 == ptr2);
     res &= (ptr1.get() == nullptr);
-
-    res &= (pupa->get_refcnt() == 0);
-    res &= (lupa->get_refcnt() == 0);
 
     return res;
 }

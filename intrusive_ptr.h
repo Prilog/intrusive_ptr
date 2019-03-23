@@ -54,8 +54,8 @@ public:
     }
 
     template <class U>
-    explicit intrusive_ptr(const intrusive_ptr<U>& arg) {
-        ptr = static_cast<T*>(arg.ptr);
+    intrusive_ptr(const intrusive_ptr<U>& arg) {
+        ptr = static_cast<T*>(arg.get());
         add_ref();
     }
 
