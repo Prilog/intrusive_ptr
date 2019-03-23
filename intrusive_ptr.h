@@ -43,13 +43,18 @@ public:
         add_ref();
     }
 
-    intrusive_ptr(const intrusive_ptr<T> &arg) {
+    intrusive_ptr(const intrusive_ptr<T>& arg) {
+        ptr = arg.ptr;
+        add_ref();
+    }
+
+    intrusive_ptr(const intrusive_ptr<T>&& arg) {
         ptr = arg.ptr;
         add_ref();
     }
 
     template <class U>
-    explicit intrusive_ptr(const intrusive_ptr<U> &arg) {
+    explicit intrusive_ptr(const intrusive_ptr<U>& arg) {
         ptr = static_cast<T*>(arg.ptr);
         add_ref();
     }
@@ -65,7 +70,14 @@ public:
         return ptr->get_refcnt();
     }
 
-    intrusive_ptr& operator=(const intrusive_ptr &arg) {
+    intrusive_ptr& operator=(const intrusive_ptr& arg) {
+        release();
+        ptr = arg.ptr;
+        add_ref();
+        return *this;
+    }
+
+    intrusive_ptr& operator=(const intrusive_ptr&& arg) {
         release();
         ptr = arg.ptr;
         add_ref();
@@ -73,7 +85,7 @@ public:
     }
 
     template <class U>
-    intrusive_ptr& operator=(const intrusive_ptr<U> &arg) {
+    intrusive_ptr& operator=(const intrusive_ptr<U>& arg) {
         release();
         ptr = static_cast<T*>(arg.ptr);
         add_ref();
