@@ -5,8 +5,6 @@
 #ifndef UNTITLED_INTRUSIVE_PTR_H
 #define UNTITLED_INTRUSIVE_PTR_H
 
-#include <functional>
-
 template <class T>
 class intrusive_ptr {
 private:
@@ -71,6 +69,7 @@ public:
         release();
         ptr = arg.ptr;
         add_ref();
+        return *this;
     }
 
     template <class U>
@@ -78,12 +77,14 @@ public:
         release();
         ptr = static_cast<T*>(arg.ptr);
         add_ref();
+        return *this;
     }
 
-    intrusive_ptr &operator=(T* arg) {
+    intrusive_ptr& operator=(T* arg) {
         release();
         ptr = arg;
         add_ref();
+        return *this;
     }
 
     void reset() {

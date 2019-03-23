@@ -64,6 +64,12 @@ bool base_test() {
     res &= (pupa->get_refcnt() == 0);
     res &= (lupa->get_refcnt() == 0);
 
+    intrusive_ptr<A> ptr3(new A("PEPA"));
+
+    ptr1 = ptr2 = ptr3;
+
+    res &= ptr1->arg == "PEPA";
+
     return res;
 }
 
@@ -211,6 +217,33 @@ bool dynamic_cast_test() {
     return res;
 }
 
+bool npe_test() {
+    bool res = true;
+
+    intrusive_ptr<A> empty;
+
+    A* pepa = new A("PEPA");
+
+    intrusive_ptr<A> ptr(pepa);
+
+    swap(empty, ptr);
+
+    swap(empty, ptr);
+
+    ptr = empty;
+
+    intrusive_ptr<A> ptr2(empty);
+
+    res &= (ptr.get() == empty);
+    res &= (ptr2.get() == empty);
+
+    empty = intrusive_ptr<A>(pepa);
+
+    res &= (empty->arg == "PEPA");
+
+    return res;
+}
+
 void run_test(bool f(), string name) {
     cout << "RUNNING: " << name << endl;
     try {
@@ -233,5 +266,6 @@ int main() {
     run_test(&bool_test, "bool_test");
     run_test(&swap_test, "swap_test");
     run_test(&dynamic_cast_test, "dynamic_cast_test");
+    run_test(&npe_test, "npe_test");
     return 0;
 }
