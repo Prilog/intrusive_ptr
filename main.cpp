@@ -76,6 +76,17 @@ bool base_test() {
     res &= ptr1->arg == "MOTHER PIG";
     res &= ptr2->arg == "MOTHER PIG";
 
+    intrusive_ptr<A>&& lnk = intrusive_ptr<A>(lupa);
+
+    intrusive_ptr<A> ptr5(lnk);
+
+    res &= (ptr5->arg == "LUPA");
+
+    lnk = intrusive_ptr<A>(pupa);
+    ptr5 = lnk;
+
+    res &= (ptr5->arg == "PUPA");
+
     return res;
 }
 
