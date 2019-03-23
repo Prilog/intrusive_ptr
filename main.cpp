@@ -69,6 +69,12 @@ bool base_test() {
     ptr1 = ptr2 = ptr3;
 
     res &= ptr1->arg == "PEPA";
+    res &= ptr2->arg == "PEPA";
+
+    ptr1 = ptr2 = new A("MOTHER PIG");
+
+    res &= ptr1->arg == "MOTHER PIG";
+    res &= ptr2->arg == "MOTHER PIG";
 
     return res;
 }
