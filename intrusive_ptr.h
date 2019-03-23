@@ -97,11 +97,14 @@ public:
         add_ref();
     }
 
-    template <typename U>
+    template <class U>
     friend void swap(intrusive_ptr<U>& a, intrusive_ptr<U>& b) noexcept;
 
-    void swap(intrusive_ptr& arg) {
-        swap(ptr, arg.ptr);
+    template <class U>
+    void swap(intrusive_ptr<U>& arg) {
+        U* buf = arg.ptr;
+        arg.ptr = ptr;
+        ptr = buf;
     }
 
     T& operator*() const {

@@ -38,6 +38,12 @@ struct B : A {
     }
 };
 
+struct C : B {
+    C() {
+        arg = "THOR";
+    }
+};
+
 bool base_test() {
     bool res = true;
 
@@ -167,7 +173,6 @@ bool bool_test() {
     return res;
 }
 
-/*
 bool swap_test() {
     bool res = true;
 
@@ -186,7 +191,25 @@ bool swap_test() {
     res &= (ptr2->arg == "PUPA");
 
     return res;
-}*/
+}
+
+bool dynamic_cast_test() {
+    bool res = true;
+
+    B* loki = new B();
+    C* thor = new C();
+
+    intrusive_ptr<B> ptr1(loki);
+    intrusive_ptr<C> ptr2(thor);
+
+    intrusive_ptr<A> ptr3 = dynamic_pointer_cast<A, B>(ptr1);
+    intrusive_ptr<A> ptr4 = dynamic_pointer_cast<A, C>(ptr2);
+
+    res &= (ptr1->arg == ptr3->arg);
+    res &= (ptr2->arg == ptr4->arg);
+
+    return res;
+}
 
 void run_test(bool f(), string name) {
     cout << "RUNNING: " << name << endl;
@@ -208,6 +231,7 @@ int main() {
     run_test(&reset_test, "reset_test");
     run_test(&pointer_test, "pointer_test");
     run_test(&bool_test, "bool_test");
-    //run_test(&swap_test, "swap_test");
+    run_test(&swap_test, "swap_test");
+    run_test(&dynamic_cast_test, "dynamic_cast_test");
     return 0;
 }
